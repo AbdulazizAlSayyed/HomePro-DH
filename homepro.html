@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HomePro – Home Services</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
+        display: ['Manrope', 'sans-serif'],
+      },
+      colors: {
+        navy: {
+          50: '#eef2fb',
+          100: '#d5e0f5',
+          200: '#adc1eb',
+          300: '#7fa0de',
+          400: '#4f7cd0',
+          500: '#2a5bbf',
+          600: '#1a4399',
+          700: '#152f6e',
+          800: '#0e1e47',
+          900: '#071030',
+          950: '#040a1e',
+        },
+        sky: {
+          accent: '#3AADDB',
+        }
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  h1,h2,h3,h4,h5 { font-family: 'Manrope', sans-serif; }
+
+  /* Nav drawer */
+  .drawer-overlay { transition: opacity .3s; }
+  .drawer-panel { transition: transform .3s cubic-bezier(.4,0,.2,1); }
+
+  /* Hero */
+  .hero-bg {
+    background: linear-gradient(135deg, #0e1e47 0%, #152f6e 50%, #1a4399 100%);
+  }
+
+  /* Worker image placeholder */
+  .worker-img {
+    background: linear-gradient(160deg, #1a3a80 0%, #0e1e47 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .worker-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 300'%3E%3Cellipse cx='100' cy='90' rx='35' ry='35' fill='%23b0c4de' opacity='.5'/%3E%3Crect x='60' y='125' width='80' height='100' rx='10' fill='%234a7cc7' opacity='.6'/%3E%3Crect x='55' y='195' width='35' height='80' rx='6' fill='%233a6ab5' opacity='.5'/%3E%3Crect x='110' y='195' width='35' height='80' rx='6' fill='%233a6ab5' opacity='.5'/%3E%3C/svg%3E") center/cover no-repeat;
+  }
+
+  .guarantee-bg {
+    background: linear-gradient(135deg, #0e1e47 0%, #152f6e 100%);
+  }
+
+  /* Services card hover */
+  .service-card { transition: all .25s; }
+  .service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(14,30,71,.15); }
+
+  /* FAQ */
+  .faq-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .faq-body.open { max-height: 300px; }
+
+  .swiper-pagination-bullet-active { background: #3AADDB !important; }
+  .swiper-button-next::after, .swiper-button-prev::after { font-size: 14px !important; color: #1a4399 !important; }
+  .swiper-button-next, .swiper-button-prev { width: 36px !important; height: 36px !important; background: white; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+
+  .cta-bottom {
+    background: linear-gradient(135deg, #0e1e47 0%, #1a4399 100%);
+  }
+
+  footer { background: #0e1e47; }
+
+  /* Blob decoration */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .15;
+    pointer-events: none;
+  }
+  .hero-card{
+    background:#152768;
+    min-height:720px;
+}
+
+.guarantee-shape {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+
+    /* Right side */
+    100% 35%,
+    94% 45%,
+    94% 55%,
+    100% 65%,
+    100% 100%,
+
+    /* Bottom */
+    0% 100%,
+
+    /* Left side */
+    0% 65%,
+    6% 55%,
+    6% 45%,
+    0% 35%
+  );
+}
+</style>
+</head>
+<body class="bg-white text-gray-800 overflow-x-hidden" x-data="{ mobileOpen: false, activeTab: 'all' }">
+
+<!-- ===== NAVBAR ===== -->
+<nav class="bg-[#152768] sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 flex items-center justify-between h-14">
+    <!-- Logo -->    <a href="#" class="flex items-center gap-2 text-white font-display font-800">
+      <div class="w-8 h-8 rounded bg-sky-accent flex items-center justify-center">
+        <svg viewBox="0 0 24 24" class="w-5 h-5 text-white fill-current"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </div>
+      <span class="text-lg font-extrabold tracking-tight">HomePro</span>
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/80">
+      <a href="#about" class="hover:text-sky-accent transition">About Us</a>
+      <a href="#services" class="hover:text-sky-accent transition">Services</a>
+      <a href="#blog" class="hover:text-sky-accent transition">Our Blog</a>
+      <a href="#contact" class="hover:text-sky-accent transition">Contact</a>
+    </div>
+
+    <div class="hidden md:flex items-center gap-3">
+      <span class="flex items-center gap-1.5 text-xs font-semibold text-white/70">
+        <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+        24 Hour Services
+      </span>
+      <a href="#contact" class="bg-sky-accent hover:bg-sky-500 text-white text-sm font-bold px-5 py-2 rounded-full transition shadow">Call Us Now</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button @click="mobileOpen=true" class="md:hidden text-white p-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div x-show="mobileOpen" class="fixed inset-0 z-[100] flex" style="display:none">
+  <!-- Overlay -->
+  <div class="drawer-overlay absolute inset-0 bg-navy-950/60 backdrop-blur-sm" @click="mobileOpen=false" :class="mobileOpen ? 'opacity-100' : 'opacity-0'"></div>
+  <!-- Panel -->
+  <div class="drawer-panel relative ml-auto w-4/5 max-w-xs bg-navy-800 h-full flex flex-col" :class="mobileOpen ? 'translate-x-0' : 'translate-x-full'">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      <div class="flex items-center gap-2 text-white">
+        <div class="w-7 h-7 rounded bg-sky-accent flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-4 h-4 text-white fill-current"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </div>
+        <span class="font-extrabold text-base tracking-tight">HomePro</span>
+      </div>
+      <button @click="mobileOpen=false" class="text-white/70 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="flex flex-col gap-0 mt-4">
+      <a href="#about" @click="mobileOpen=false" class="text-white text-xl font-semibold px-8 py-6 border-b border-white/10 hover:bg-white/5 transition">About Us</a>
+      <a href="#services" @click="mobileOpen=false" class="text-white text-xl font-semibold px-8 py-6 border-b border-white/10 hover:bg-white/5 transition">Services</a>
+      <a href="#blog" @click="mobileOpen=false" class="text-white text-xl font-semibold px-8 py-6 border-b border-white/10 hover:bg-white/5 transition">Our Blog</a>
+      <a href="#contact" @click="mobileOpen=false" class="text-white text-xl font-semibold px-8 py-6 border-b border-white/10 hover:bg-white/5 transition">Contact</a>
+    </div>
+    <div class="mt-auto px-8 py-6">
+      <span class="flex items-center gap-2 text-white/70 text-sm font-semibold">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-400 animate-pulse"></span>
+        24 Hour Services
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<!-- ===== HERO ===== -->
+<section class="bg-gray-100 pt-0 px-0">
+  <div class="relative max-w-[1400px] mx-auto bg-[#152768] overflow-hidden min-h-[760px]">
+
+    <!-- LEFT IMAGE -->
+    <!-- LEFT IMAGE -->
+<div class="hidden lg:block absolute left-8 top-8 w-[220px] h-[650px]">
+    <img
+        src="./assests/Image 1.png"
+        alt="Worker"
+        class="w-full h-full object-cover rounded-tl-[18px] rounded-bl-[18px]"
+    />
+
+    <!-- Bottom Fade -->
+    <div
+        class="absolute inset-0 rounded-tl-[18px] rounded-bl-[18px]
+        bg-gradient-to-t
+        from-[#152768]
+        via-transparent
+        to-transparent">
+    </div>
+</div>
+
+    <!-- RIGHT IMAGE -->
+    <!-- RIGHT IMAGE -->
+<div class="hidden lg:block absolute right-8 top-8 w-[220px] h-[650px]">
+    <img
+        src="./assests/Image 2.png"
+        alt="Worker"
+        class="w-full h-full object-cover rounded-tr-[18px] rounded-br-[18px]"
+    />
+
+    <!-- Bottom Fade -->
+    <div
+        class="absolute inset-0 rounded-tr-[18px] rounded-br-[18px]
+        bg-gradient-to-t
+        from-[#152768]
+        via-transparent
+        to-transparent">
+    </div>
+</div>
+    <!-- CENTER CONTENT -->
+    <div class="relative z-10 flex flex-col items-center text-center pt-36 px-6">
+
+      <!-- CATEGORY -->
+      <div class="flex items-center gap-4 text-white/60 text-sm mb-8">
+        <span>Maintenances</span>
+        <span>•</span>
+        <span>Repairs</span>
+        <span>•</span>
+        <span>Improvements</span>
+      </div>
+
+      <!-- HEADING -->
+      <h1
+        class="font-extrabold text-white text-[42px] md:text-[52px] leading-[1.1] max-w-[720px] max-w-[650px]"
+      >
+        Need improvement<br />
+        or repair your home?<br />
+        we can help!
+      </h1>
+
+      <!-- FEATURES -->
+      <div
+        class="flex flex-wrap justify-center gap-8 mt-8 text-sm text-white/80"
+      >
+        <div class="flex items-center gap-2">
+          <svg
+            class="w-4 h-4 text-cyan-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Free Quotes
+        </div>
+
+        <div class="flex items-center gap-2">
+          <svg
+            class="w-4 h-4 text-cyan-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          100% Commitment-Free
+        </div>
+      </div>
+
+      <!-- CTA BUTTON -->
+      <a
+        href="#contact"
+        class="mt-10 inline-flex items-center bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-6 py-3 rounded-full transition"
+      >
+        Call Us Now
+
+        <span
+          class="ml-3 w-8 h-8 bg-white rounded-full flex items-center justify-center"
+        >
+          <svg
+            class="w-4 h-4 text-cyan-500"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.95.684l1.5 4.5a1 1 0 01-.502 1.21l-2.257 1.128a11.042 11.042 0 005.516 5.516l1.128-2.257a1 1 0 011.21-.502l4.5 1.5A1 1 0 0121 15.72V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+            />
+          </svg>
+        </span>
+      </a>
+    </div>
+
+    <!-- BOTTOM FEATURES -->
+    <div
+    class="absolute  bottom-5 left-1/2 -translate-x-1/2 hidden md:flex items-center text-white">
+
+    <!-- Item 1 -->
+    <div class="flex items-center gap-3 px-8">
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+            ⭐
+        </div>
+
+        <div class="text-sm leading-tight">
+            Satisfaction<br>
+            Guarantee
+        </div>
+    </div>
+
+    <div class="h-10 w-px bg-white/20"></div>
+
+    <!-- Item 2 -->
+    <div class="flex items-center gap-3 px-8">
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+            🕒
+        </div>
+
+        <div class="text-sm leading-tight">
+            24H<br>
+            Availability
+        </div>
+    </div>
+
+    <div class="h-10 w-px bg-white/20"></div>
+
+    <!-- Item 3 -->
+    <div class="flex items-center gap-3 px-8">
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+            📍
+        </div>
+
+        <div class="text-sm leading-tight">
+            Local US<br>
+            Professional
+        </div>
+    </div>
+
+    <div class="h-10 w-px bg-white/20"></div>
+
+    <!-- Item 4 -->
+    <div class="flex items-center gap-3 px-8">
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+            📅
+        </div>
+
+        <div class="text-sm leading-tight">
+            Flexible<br>
+            Appointments
+        </div>
+    </div>
+</div>
+
+    <!-- BOTTOM CUTOUTS -->
+  <!-- Bottom Shape -->
+   <div class="absolute bottom-0 left-0 w-full h-12 ">
+    <svg
+        class="w-full h-full"
+        viewBox="0 0 1400 50"
+        preserveAspectRatio="none">
+
+        <path
+            d="
+            M0,0
+            H220
+            L245,25
+            H1155
+            L1180,0
+            H1400
+            V50
+            H0
+            Z
+            "
+            fill="#f3f4f6" />
+    </svg>
+  </div>
+
+  </div>
+</section>
+
+<!-- ===== ABOUT / PROFESSIONAL ===== -->
+<section id="about" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+    <!-- Text -->
+    <div>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-navy-800 mb-5 leading-tight">Professional for your<br/>home services</h2>
+      <p class="text-gray-500 text-sm leading-relaxed mb-8">You deserve the home you live in. We provide a wide range of professional home services so you can spend more time doing what you love. Whether you need a small repair or a complete renovation, HomePro's trusted experts have you covered.</p>
+      <div class="grid grid-cols-2 gap-3 mb-8">
+        <div class="flex items-center gap-2 text-sm font-semibold text-navy-800">
+          <svg class="w-4 h-4 text-sky-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Repair and Installation
+        </div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-navy-800">
+          <svg class="w-4 h-4 text-sky-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Plumbing
+        </div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-navy-800">
+          <svg class="w-4 h-4 text-sky-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Maintenance
+        </div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-navy-800">
+          <svg class="w-4 h-4 text-sky-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Budget-friendly
+        </div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-navy-800">
+          <svg class="w-4 h-4 text-sky-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Home Security Services
+        </div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-navy-800">
+          <svg class="w-4 h-4 text-sky-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Eco-friendly solutions
+        </div>
+      </div>
+      <a
+  href="tel:8886175894"
+  class="inline-flex flex-col items-start bg-navy-800 hover:bg-navy-700 text-white font-bold px-7 py-3 rounded-2xl text-sm transition"
+>
+  <span>We provide 24-hour fast service to help you.</span>
+  <span>Contact us at (888) 617-5894</span>
+</a>
+    </div>
+    <!-- Image -->
+    <div class="relative w-full max-w-md">
+  <div
+    class="overflow-hidden shadow-2xl bg-navy-100"
+    style="clip-path: polygon(
+      20% 0%,
+      80% 0%,
+      100% 15%,
+      100% 85%,
+      100% 100%,
+      100% 100%,
+      0% 100%,
+      0% 15%
+    );"
+  >
+    <img
+      src="./assests/Image.png"
+      alt="home service professionals"
+      class="w-full h-full object-cover aspect-[4/3]"
+      onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=700&q=80'"
+    />
+  </div>
+</div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<!-- ===== SERVICES ===== -->
+<!-- ===== SERVICES ===== -->
+<section id="services" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-navy-800 mb-3">Our Services</h2>
+      <p class="text-gray-500 text-sm max-w-lg mx-auto">You have a problems with leaking pipes, broken tiles, lost keys or want to tidy up the trees around you, of course you need our help!</p>
+    </div>
+
+    <!-- 4-column grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <!-- Card: Plumbing -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16.5A4.5 4.5 0 007 7.5M7 16.5h10M7 16.5a4.5 4.5 0 010-9M17 16.5a4.5 4.5 0 000-9M17 7.5H7"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Plumbing services</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Drain pipe leaking, pipe clogged, replace the pipe line</p>
+      </div>
+
+      <!-- Card: Roofing -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline stroke-linecap="round" stroke-linejoin="round" points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Roofing repair</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Roof leaks, tile replacement, roof cleaning and maintenance</p>
+      </div>
+
+      <!-- Card: Mold Removal -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Mold Removal</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Removing and cleaning mildew, Restoration and Prevention</p>
+      </div>
+
+      <!-- Card: Tree Trimming -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Tree Trimming</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Trimming and clearing, Deadwood removal, Tree shaping</p>
+      </div>
+
+      <!-- Card: Appliance Repair -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Appliance Repair</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Repair of washing machines, refrigerators, Air conditioner, etc.</p>
+      </div>
+
+      <!-- Card: Bathroom Remodeling -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Bathroom Remodeling</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Design and Consulting, Installation, Repairing, tile repair</p>
+      </div>
+
+      <!-- Card: Locksmith -->
+      <div class="service-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow">
+        <div class="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center mb-3">
+          <svg class="w-5 h-5 text-navy-700" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h3 class="text-navy-800 font-bold text-sm mb-1">Locksmith</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">Lock Installation and Repair, Duplication, Lock Rekeying</p>
+      </div>
+
+      <!-- Card: More service? — highlighted CTA card -->
+      <div class="service-card bg-sky-500 rounded-2xl p-5 cursor-pointer hover:bg-sky-600 transition-colors flex flex-col items-center justify-center text-center gap-3">
+        <div>
+          <p class="text-white font-bold text-sm mb-1">More service?</p>
+          <p class="text-white/80 text-xs leading-relaxed">You can tell us what you need and we can help!</p>
+        </div>
+        <a href="#contact" class="bg-white text-sky-600 font-bold px-6 py-2 rounded-full text-xs transition hover:bg-sky-50 whitespace-nowrap">Call Us Now</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== GUARANTEE ===== -->
+<!-- CUSTOM SHAPE -->
+
+<!-- ===== GUARANTEE ===== -->
+<section class="py-24 bg-[#00000]">
+
+  <!-- OUTER SPACING -->
+  <div class="px-6 lg:px-16 xl:px-24">
+
+    <!-- SHAPED CONTAINER -->
+    <div class="guarantee-shape bg-[#0d1b35] max-w-[1400px] mx-auto px-8 md:px-12 lg:px-20 py-20">
+
+      <!-- TOP -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-14">
+
+        <div>
+          <h2 class="text-white font-black leading-[1.05] text-[42px] md:text-[56px] lg:text-[64px]">
+            Fast, Friendly, and<br>
+            Satisfaction<br>
+            Guarantee
+          </h2>
+        </div>
+
+        <div class="lg:pl-16">
+          <p class="text-white/60 text-sm leading-relaxed max-w-md">
+            No matter how big or small your work is, whether it's for the
+            interior or exterior of your home, we are ready to serve and help
+            you solve your home problems.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="border-t border-white/10 mb-14"></div>
+
+      <!-- FEATURES -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-12">
+
+        <!-- ITEM 1 -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[#162444] flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold text-sm mb-2">
+              Satisfaction Guarantee
+            </h4>
+
+            <p class="text-white/45 text-xs leading-relaxed">
+              You don't need to worry about scams or our performance results,
+              our company has been verified and strives for optimal results.
+            </p>
+          </div>
+        </div>
+
+        <!-- ITEM 2 -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[#162444] flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold text-sm mb-2">Free Quotes</h4>
+
+            <p class="text-white/45 text-xs leading-relaxed">
+              Get personalized cost estimates without any obligation.
+              Experience transparency and peace of mind.
+            </p>
+          </div>
+        </div>
+
+        <!-- ITEM 3 -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[#162444] flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold text-sm mb-2">
+              Local Professionals
+            </h4>
+
+            <p class="text-white/45 text-xs leading-relaxed">
+              Our services cover nationwide locations including urban,
+              suburban, and rural areas.
+            </p>
+          </div>
+        </div>
+
+        <!-- ITEM 4 -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[#162444] flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold text-sm mb-2">
+              Fast 24-Hour Service
+            </h4>
+
+            <p class="text-white/45 text-xs leading-relaxed">
+              Need urgent repairs? Our experts are available any time to help
+              solve the problem.
+            </p>
+          </div>
+        </div>
+
+        <!-- ITEM 5 -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[#162444] flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM4 8h12v8H4V8z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold text-sm mb-2">
+              Flexible Appointments
+            </h4>
+
+            <p class="text-white/45 text-xs leading-relaxed">
+              Convenient appointment times that fit your schedule, day or
+              night, seven days a week.
+            </p>
+          </div>
+        </div>
+
+        <!-- ITEM 6 -->
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-[#162444] flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold text-sm mb-2">
+              100% Commitment-Free
+            </h4>
+
+            <p class="text-white/45 text-xs leading-relaxed">
+              Ask us about any issue you're facing. We offer a completely
+              no-commitment approach.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+    <!-- Image -->
+    <div class="relative">
+      <div class="rounded-2xl overflow-hidden shadow-2xl aspect-square bg-navy-100 max-w-sm mx-auto lg:mx-0">
+        <img src="./assests/Image (1).png" alt="professional worker" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80'" />
+      </div>
+      <!-- Verified badge -->
+      <div class="absolute top-4 right-4 lg:right-0 lg:-right-6 bg-sky-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      </div>
+    </div>
+    <!-- Steps -->
+    <div>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-navy-800 mb-10 leading-tight">How HomePro<br/>works?</h2>
+      <div class="flex flex-col gap-8">
+        <div class="flex gap-5 items-start">
+          <div class="w-12 h-12 rounded-full bg-navy-800 text-white font-extrabold text-lg flex items-center justify-center flex-shrink-0 shadow-md">1</div>
+          <div>
+            <h4 class="font-bold text-navy-800 mb-1">Call us anytime 24/7</h4>
+            <p class="text-gray-400 text-sm leading-relaxed">You can contact us directly via our phone or website form and our agent will reach out immediately.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 items-start">
+          <div class="w-12 h-12 rounded-full bg-navy-800 text-white font-extrabold text-lg flex items-center justify-center flex-shrink-0 shadow-md">2</div>
+          <div>
+            <h4 class="font-bold text-navy-800 mb-1">Schedule an appointment</h4>
+            <p class="text-gray-400 text-sm leading-relaxed">We'll connect you with the best local professional and schedule a time that works for you.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 items-start">
+          <div class="w-12 h-12 rounded-full bg-sky-accent text-white font-extrabold text-lg flex items-center justify-center flex-shrink-0 shadow-md">3</div>
+          <div>
+            <h4 class="font-bold text-navy-800 mb-1">Your request is completed</h4>
+            <p class="text-gray-400 text-sm leading-relaxed">Our skilled professional arrives and completes your home service to the highest standard.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-navy-800 mb-2">Here our original reviews<br/>from trusted platform</h2>
+    <div class="flex items-center justify-center gap-2 mt-4 mb-10">
+      <!-- Trustpilot-style logo -->
+      <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      <span class="font-bold text-navy-800">Trustpilot</span>
+    </div>
+
+    <!-- Swiper -->
+    <div class="swiper reviewSwiper pb-12">
+      <div class="swiper-wrapper">
+        <!-- Review 1 -->
+        <div class="swiper-slide">
+          <div class="bg-white rounded-2xl p-8 shadow-sm text-left relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-11 h-11 rounded-full bg-navy-200 flex items-center justify-center font-bold text-navy-800">K</div>
+              <div>
+                <p class="font-bold text-navy-800 text-sm">Kando Atife</p>
+                <div class="flex gap-0.5 mt-0.5">
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">"Roof repairs a custom finder for the home fixtures in 3 days. Even working late without time breaks. With me for a whole year's price. The repair lasted 5 years! Will definitely be calling HomePro again."</p>
+          </div>
+        </div>
+        <!-- Review 2 -->
+        <div class="swiper-slide">
+          <div class="bg-white rounded-2xl p-8 shadow-sm text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-11 h-11 rounded-full bg-sky-accent/20 flex items-center justify-center font-bold text-navy-800">M</div>
+              <div>
+                <p class="font-bold text-navy-800 text-sm">Maria Gonzalez</p>
+                <div class="flex gap-0.5 mt-0.5">
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">"Incredible plumbing service! They arrived within the hour and fixed everything perfectly. Pricing was transparent and affordable. I highly recommend HomePro to anyone looking for reliable home services."</p>
+          </div>
+        </div>
+        <!-- Review 3 -->
+        <div class="swiper-slide">
+          <div class="bg-white rounded-2xl p-8 shadow-sm text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-11 h-11 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-700">J</div>
+              <div>
+                <p class="font-bold text-navy-800 text-sm">James Whitfield</p>
+                <div class="flex gap-0.5 mt-0.5">
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">"Used HomePro for bathroom remodeling and the results exceeded expectations. Professional team, clean work, finished on schedule. Very happy with the outcome and would definitely use them again."</p>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination mt-6"></div>
+      <div class="swiper-button-next !-right-2 !top-1/2"></div>
+      <div class="swiper-button-prev !-left-2 !top-1/2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOG ===== -->
+<section id="blog" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-navy-800 mb-3">Explore Insights in Our Blog</h2>
+      <p class="text-gray-400 text-sm max-w-md mx-auto">Find lots of insights and information on our blog. Explore, learn, and get inspired to improve your home.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+      <!-- Blog Card 1 -->
+      <article class="rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition service-card">
+        <div class="aspect-video bg-navy-100">
+          <img src="./assests/Thumbnail.png" alt="Smart Home Systems" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=500&q=80'" />
+        </div>
+        <div class="p-5">
+          <div class="flex gap-2 mb-3 flex-wrap">
+            <span class="text-xs bg-navy-50 text-navy-700 font-semibold px-2.5 py-1 rounded-full">Plumbing</span>
+            <span class="text-xs bg-sky-accent/10 text-sky-700 font-semibold px-2.5 py-1 rounded-full">Architecture</span>
+          </div>
+          <h3 class="font-bold text-navy-800 text-base leading-snug mb-2">Understanding Smart Home Systems & Maintenance</h3>
+          <p class="text-gray-400 text-xs leading-relaxed">Discover how to set up and maintain smart home systems that make your home safer, more comfortable and energy-efficient.</p>
+        </div>
+      </article>
+      <!-- Blog Card 2 -->
+      <article class="rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition service-card">
+        <div class="aspect-video bg-navy-100">
+          <img src="./assests/Thumbnail (1).png" alt="Home Repairs" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-5">
+          <div class="flex gap-2 mb-3 flex-wrap">
+            <span class="text-xs bg-navy-50 text-navy-700 font-semibold px-2.5 py-1 rounded-full">Plumbing</span>
+            <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">Maintenance</span>
+          </div>
+          <h3 class="font-bold text-navy-800 text-base leading-snug mb-2">The Ultimate Guide to Home Repairs and Renovations</h3>
+          <p class="text-gray-400 text-xs leading-relaxed">Your complete guide to understanding home repair priorities, hiring professionals, and keeping renovation costs under control.</p>
+        </div>
+      </article>
+      <!-- Blog Card 3 -->
+      <article class="rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition service-card">
+        <div class="aspect-video bg-navy-100">
+          <img src="./assests/Thumbnail (2).png" alt="Painting" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-5">
+          <div class="flex gap-2 mb-3 flex-wrap">
+            <span class="text-xs bg-navy-50 text-navy-700 font-semibold px-2.5 py-1 rounded-full">Painting</span>
+            <span class="text-xs bg-orange-50 text-orange-700 font-semibold px-2.5 py-1 rounded-full">Maintenance</span>
+          </div>
+          <h3 class="font-bold text-navy-800 text-base leading-snug mb-2">Painting Techniques for a Kitchen Refresh</h3>
+          <p class="text-gray-400 text-xs leading-relaxed">Explore professional painting techniques to transform your kitchen with a fresh, modern look and lasting finish.</p>
+        </div>
+      </article>
+    </div>
+    <div class="text-center mt-10">
+      <a href="#" class="inline-flex items-center gap-2 border-2 border-navy-800 text-navy-800 hover:bg-navy-800 hover:text-white font-bold px-8 py-3 rounded-full text-sm transition">
+        View More
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-start">
+    <div>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-navy-800 mb-4 leading-tight">Frequently Asked<br/>Questions</h2>
+      <p class="text-gray-400 text-sm mb-6">Still have questions? <a href="#contact" class="text-sky-accent font-semibold hover:underline">Get in touch now</a></p>
+    </div>
+
+    <div class="flex flex-col gap-3" id="faqContainer">
+      <!-- FAQ item -->
+      <div class="faq-item bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+        <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-semibold text-navy-800 text-sm" onclick="toggleFaq(this)">
+          What is HomePro?
+          <svg class="faq-icon w-5 h-5 text-sky-accent flex-shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body px-5 pb-4 text-gray-400 text-xs leading-relaxed">
+          HomePro is a home services platform that connects homeowners with vetted local professionals for repairs, maintenance, and improvements — available 24/7.
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+        <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-semibold text-navy-800 text-sm" onclick="toggleFaq(this)">
+          Are the service providers on HomePro reliable and qualified?
+          <svg class="faq-icon w-5 h-5 text-sky-accent flex-shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body px-5 pb-4 text-gray-400 text-xs leading-relaxed">
+          All professionals are background-checked, licensed, and insured. We verify credentials and only list providers who meet our strict quality standards.
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+        <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-semibold text-navy-800 text-sm" onclick="toggleFaq(this)">
+          What if I have an issue or complaint about a service provider?
+          <svg class="faq-icon w-5 h-5 text-sky-accent flex-shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body px-5 pb-4 text-gray-400 text-xs leading-relaxed">
+          Our satisfaction guarantee covers all services. If you're not happy, contact our support team and we'll resolve it — including free redo of the service if needed.
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+        <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-semibold text-navy-800 text-sm" onclick="toggleFaq(this)">
+          How are payments handled on HomePro?
+          <svg class="faq-icon w-5 h-5 text-sky-accent flex-shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body px-5 pb-4 text-gray-400 text-xs leading-relaxed">
+          Payments are fully transparent. You receive a detailed quote upfront, and only pay once the job is completed to your satisfaction. We accept cards and digital payments.
+        </div>
+      </div>
+      <div class="faq-item bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+        <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-semibold text-navy-800 text-sm" onclick="toggleFaq(this)">
+          How do I leave a review for a service provider?
+          <svg class="faq-icon w-5 h-5 text-sky-accent flex-shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body px-5 pb-4 text-gray-400 text-xs leading-relaxed">
+          After each service is completed, you'll receive an email prompting you to rate and review your provider. Your feedback helps our community stay high quality.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BOTTOM ===== -->
+<section id="contact" class="cta-bottom py-20 relative overflow-hidden">
+  <div class="blob w-80 h-80 bg-sky-accent -top-10 right-10"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+    <div>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6">Already to improve<br/>or repair your home?<br/>Let's Talk!</h2>
+      <a href="tel:+18005551234" class="inline-flex items-center gap-2 bg-sky-accent hover:bg-sky-500 text-white font-bold px-8 py-4 rounded-full text-base shadow-xl transition hover:-translate-y-0.5">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+        Call Us Now
+      </a>
+    </div>
+    <div class="hidden lg:flex justify-end">
+      <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl bg-navy-700">
+        <img src="./assests/Image (3).png" alt="professional" class="w-full h-full object-cover" onerror="this.src='./'" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="py-14">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <!-- Top: Logo + newsletter -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 pb-10 border-b border-white/10">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-2 text-white mb-4">
+          <div class="w-8 h-8 rounded bg-sky-accent flex items-center justify-center">
+            <svg viewBox="0 0 24 24" class="w-5 h-5 text-white fill-current"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          </div>
+          <span class="font-extrabold text-lg">HomePro</span>
+        </div>
+        <p class="text-white/40 text-xs leading-relaxed max-w-xs">Your trusted home services partner. Licensed professionals available 24/7 for any home repair, maintenance, or improvement.</p>
+        <div class="flex gap-3 mt-5">
+          <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-sky-accent hover:text-white transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-sky-accent hover:text-white transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-sky-accent hover:text-white transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div class="grid grid-cols-2 gap-8 lg:col-span-2">
+        <div>
+          <h5 class="text-white font-bold text-sm mb-4">Company</h5>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="#about" class="text-white/40 text-xs hover:text-sky-accent transition">About Us</a></li>
+            <li><a href="#services" class="text-white/40 text-xs hover:text-sky-accent transition">Services</a></li>
+            <li><a href="#blog" class="text-white/40 text-xs hover:text-sky-accent transition">Our Blog</a></li>
+            <li><a href="#contact" class="text-white/40 text-xs hover:text-sky-accent transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-white font-bold text-sm mb-4">Legal</h5>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="#" class="text-white/40 text-xs hover:text-sky-accent transition">Privacy Policy</a></li>
+            <li><a href="#" class="text-white/40 text-xs hover:text-sky-accent transition">Terms of Service</a></li>
+            <li><a href="#" class="text-white/40 text-xs hover:text-sky-accent transition">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="pt-7 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-white/30 text-xs">© 2025 HomePro. All rights reserved.</p>
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded bg-sky-accent/20 flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-4 h-4 text-sky-accent fill-current"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </div>
+        <span class="text-white/40 text-xs">HomePro — Your home, our priority</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// FAQ toggle
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const body = item.querySelector('.faq-body');
+  const icon = btn.querySelector('.faq-icon');
+  const isOpen = body.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = '');
+
+  if (!isOpen) {
+    body.classList.add('open');
+    icon.style.transform = 'rotate(180deg)';
+  }
+}
+
+// Swiper
+new Swiper('.reviewSwiper', {
+  slidesPerView: 1,
+  spaceBetween: 20,
+  loop: true,
+  autoplay: { delay: 5000, disableOnInteraction: false },
+  pagination: { el: '.swiper-pagination', clickable: true },
+  navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+  breakpoints: {
+    640: { slidesPerView: 1 },
+    900: { slidesPerView: 1 }
+  }
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
